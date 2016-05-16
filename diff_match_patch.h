@@ -281,6 +281,17 @@ class diff_match_patch {
     return diffs;
   }
 
+  Diffs diff_lines(string_t text1, string_t text2) const
+  {
+	  //Diffs diffs;
+	  //diff_lineMode(text1, text2, 1, diffs);
+	  Lines lines;
+	  diff_linesToChars(text1, text2, lines);
+	  auto diffs = diff_main(text1, text2, false);
+	  diff_charsToLines(diffs, lines);
+	  return diffs;
+  }
+
   /**
    * Find the differences between two texts.  Simplifies the problem by
    * stripping any common prefix or suffix off the texts before diffing.
@@ -631,6 +642,8 @@ class diff_match_patch {
       { return this->second < p.second? true : this->second > p.second? false : string_t::traits_type::compare(this->first, p.first, this->second) < 0; }
   };
   struct Lines : std::vector<LinePtr> { string_t text1, text2; };
+
+  
 
   static void diff_linesToChars(string_t &text1, string_t &text2, Lines& lineArray) {
     std::map<LinePtr, size_t> lineHash;
